@@ -421,8 +421,8 @@ module.exports = {
         // For .css files
         test: /\.css$/i,
         use: [
-          "style-loader",
-          "css-loader",
+          'style-loader', // injects the CSS into the DOM 
+          'css-loader', // load and resolve CSS dependencies, turn CSS into JavaScript modules.,
         ],
       },
       {
@@ -433,14 +433,14 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: {
-                localIdentName: '[name]__[local]__[hash:base64:5]',
+              modules: { // https://webpack.js.org/loaders/css-loader/#modules
+                localIdentName: '[path][name]__[local]--[hash:base64:5]', // https://webpack.js.org/loaders/css-loader/#localidentname
               },
-              importLoaders: 1,
+              importLoaders: 1, // https://webpack.js.org/loaders/css-loader/#importloaders
               sourceMap: true,
             },
           },
-          'sass-loader',
+          'sass-loader', // transpile the SCSS into CSS
         ],
       },
       ...

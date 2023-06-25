@@ -27,6 +27,32 @@ module.exports = {
           })
         }, // applies ts-loader to the matched files
         exclude: /node_modules/, // excludes files in the node_modules directory
+      },
+      {
+        // For .css files
+        test: /\.css$/i,
+        use: [
+          'style-loader', // injects the CSS into the DOM 
+          'css-loader', // load and resolve CSS dependencies, turn CSS into JavaScript modules.,
+        ],
+      },
+      {
+        // for .module.scss and .module.sass files
+        test: /\.module\.s[ac]ss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: { // https://webpack.js.org/loaders/css-loader/#modules
+                localIdentName: '[path][name]__[local]--[hash:base64:5]', // https://webpack.js.org/loaders/css-loader/#localidentname
+              },
+              importLoaders: 1, // https://webpack.js.org/loaders/css-loader/#importloaders
+              sourceMap: true,
+            },
+          },
+          'sass-loader', // transpile the SCSS into CSS
+        ],
       }
     ],
   },

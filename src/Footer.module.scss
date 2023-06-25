@@ -1,0 +1,13 @@
+.footer {
+  height: 50px;
+  background-color: #333;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .date {
+    color: rgb(189, 149, 248);
+    margin: 0 5px;
+  }
+}
