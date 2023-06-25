@@ -279,7 +279,7 @@ Documentation at: https://prettier.io/docs/en/index.html
   
 ```json
 {
-  "printWidth": 140,
+  "printWidth": 80,
   "singleQuote": true
 }
 ```
@@ -291,6 +291,8 @@ dist
 node_modules
 ```
 
+See more on `.prettierignore` at https://prettier.io/docs/en/ignore.html 
+
 4. Update the `package.json` 'scripts' section with new commands:
 
 ```json
@@ -298,8 +300,8 @@ node_modules
   // ...
   "scripts": {
     // ...
-    "prettier": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-    "prettier:write": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "prettier:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
   }
 }
 ```
@@ -315,8 +317,8 @@ Documentation: https://eslint.org/docs/latest/use/getting-started
 1. Add development dependencies via NPM:
    - `npm i -D eslint eslint-plugin-react` to use it with ReactJS
    - `npm i -D @typescript-eslint/parser @typescript-eslint/eslint-plugin` to use with TypeScript
-   - `npm i -D eslint-plugin-prettier eslint-config-prettier` to integrate prettier with eslint. `eslint-plugin-prettier` will
-   enable the usage of prettier as eslint rule, `eslint-config-prettier` will disable eslint rules that will conflict with prettier.
+   - `npm i -D eslint-plugin-prettier eslint-config-prettier` to integrate prettier with eslint. `eslint-plugin-prettier` will enable the usage of prettier as eslint rule, 
+   `eslint-config-prettier` will disable eslint rules that will conflict with prettier.
    - `npm i -D eslint-webpack-plugin` integrate with Webpack
 
 2. Create a file in the project's root directory called `.eslintrc` with the following content:
