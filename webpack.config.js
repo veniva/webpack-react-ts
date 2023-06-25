@@ -12,10 +12,16 @@ module.exports = (_, argv) => {
   return {
     entry: path.join(__dirname, "src", "index.tsx"),
     output: {
-      filename: "bundle.js",
+      filename: "[name].[contenthash].js",
       path: path.resolve(__dirname, "dist"),
       assetModuleFilename: "assets/[name]__[hash][ext]",
       clean: true,
+    },
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+      },
+      runtimeChunk: 'single',
     },
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"] // enables the imports of those files without their extension being provided

@@ -602,32 +602,25 @@ module.exports = (_, argv) => {
 If we want webpack to automatically put all `node_modules` imports into a separate vendor bundle, 
 we can use the `SplitChunksPlugin`, which is included by default in webpack 4 and above.
 
+https://webpack.js.org/plugins/split-chunks-plugin/ 
+
 1. Update the content of `webpack.config.js`:
 
 ```javascript
 module.exports = (_, argv) => {
 
   return {
-    entry: {
-      bundle: path.join(__dirname, "src", "index.tsx"),
-    },
     output: {
       filename: "[name].[contenthash].js",
       // ...
     },
     // ...
     optimization: {
-      runtimeChunk: 'single', // enable "runtime" chunk
       splitChunks: {
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
-          },
-        },
+        chunks: 'all',
       },
-    }
+      runtimeChunk: 'single',
+    },
     // ...
   }
 ```
