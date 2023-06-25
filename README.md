@@ -220,8 +220,23 @@ https://webpack.js.org/configuration/dev-server/#devserverhot
 1. Install dependencies: 
    - `npm i -D @pmmmwh/react-refresh-webpack-plugin react-refresh-typescript`
 
-2. Detect environment in `webpack.config.js`: 
-   - add this line: `const isDevelopment = process.env.NODE_ENV !== 'production';`
+2. Detect environment in `webpack.config.js` two ways: 
+   - add this line: `const isDevelopment = process.env.NODE_ENV !== 'production';`, 
+    install the npm package `cross-env` and prepend the build command with `crossenv NODE_ENV=production webpack --mode production` 
+    
+    OR BETTER:
+
+   - export a function instead of plain object from `webpack.config.js` passing arguments:
+
+```js
+module.exports = (_, argv) => {
+  const isDevelopment = argv.mode === 'development';
+}
+```
+    (see https://webpack.js.org/configuration/configuration-types/#exporting-a-function 
+    and also
+    https://webpack.js.org/guides/environment-variables/#root)
+
 
 3. Import the modules: 
 ```javascript

@@ -4,7 +4,7 @@ import Header from './Header';
 import MainContent from './MainContent';
 
 const App = () => (
-  <section className='container'>
+  <section className="container">
     <Header />
     <MainContent />
     <Footer />
