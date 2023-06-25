@@ -653,3 +653,60 @@ The generated source maps should not be uploaded to the server to be publicly ac
 They may be made available to Sentry by uploading them using their CLI tools (consult Sentry's docs).  
 If the project is internal private app, then those source maps can be served alongside the `js` files and Sentry will likely pick them up from there.
 (also consult to Sentry's docs on that if necessary)
+
+## Add an automated test
+
+Let's add one integration test to make sure that our testing environment works as expected.
+
+1. Add new commands to `package.json`:
+
+```json
+{
+  // ...
+  "scripts": {
+    // ...
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cover": "jest --coverage"
+    // ...
+  },
+  // ...
+}
+```
+
+2. Add this to `jest.config.js`:
+
+```js
+  // ...
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!**/node_modules/**',
+    '!**/vendor/**',
+  ],
+  // ...
+```
+
+3. Create a test file `stc/Counter.test.tsx` with the following content:
+
+```ts
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import Counter from './Counter';
+
+test('Button increases counter', async () => {
+  // arrange
+  userEvent.setup();
+  render(<Counter />);
+  const button = screen.getByRole('button', { name: 'Increase' });
+
+  // Assert (initial state) - check initial counter value
+  const counter = screen.getByText('Button clicks: 0');
+  expect(counter).toBeInTheDocument();
+
+  // Act
+  await userEvent.click(button);
+
+  // Assert (after action)
+  expect(screen.getByText('Button clicks: 1')).toBeInTheDocument();
+});
+```

@@ -10,4 +10,9 @@ module.exports = {
    * "setupFilesAfterEnv" docs at: https://jestjs.io/docs/configuration#setupfilesafterenv-array
    */
   setupFilesAfterEnv: ["@testing-library/jest-dom/extend-expect"],
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!**/node_modules/**',
+    '!**/vendor/**',
+  ],
 };
