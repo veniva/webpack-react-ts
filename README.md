@@ -144,9 +144,11 @@ if(container) {
 
 - `sourceMap`: Generates source map files to enable easier debugging in the browser.
 
+- `module`: Which module system to use. Values like `esnext`, `es6` for newer browsers, `commonjs` for older browsers and NodeJS.
+
 - `jsx`: When set to `react-jsx` we don't need to include React in every `.tsx` or `.jsx` file.
 
-- `esModuleInterop`: Ensures compatibility between es6 modules and packages in node_modules.
+- `esModuleInterop`: Ensures compatibility between `es6` modules and packages in `node_modules` that use `CommonJS/AMD/UMD`.
 
 
 ## Create webpack.config.js
