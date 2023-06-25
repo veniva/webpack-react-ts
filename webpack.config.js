@@ -1,5 +1,9 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ReactRefreshTypeScript = require('react-refresh-typescript');
+
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // https://webpack.js.org/configuration/
 module.exports = {
@@ -15,7 +19,12 @@ module.exports = {
     rules:[
       {
         test: /\.(ts|js)x?$/, // matches .ts and .tsx files
-        use: 'ts-loader', // applies ts-loader to the matched files
+        loader: 'ts-loader',
+        options: {
+          getCustomTransformers: () => ({
+            before: [isDevelopment && ReactRefreshTypeScript()].filter(Boolean),
+          })
+        }, // applies ts-loader to the matched files
         exclude: /node_modules/, // excludes files in the node_modules directory
       }
     ],
@@ -23,8 +32,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "public", "index.html")
-    })
-  ],
+    }),
+    isDevelopment && new ReactRefreshWebpackPlugin()
+  ].filter(Boolean),
   devServer: {
     port: 3000,
     open: true,

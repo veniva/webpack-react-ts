@@ -214,20 +214,40 @@ module.exports = {
 
 ## Configure Hot Module Replacement (HMR) in Webpack
 
+https://webpack.js.org/guides/hot-module-replacement/
+https://webpack.js.org/configuration/dev-server/#devserverhot
+
 1. Install dependencies: 
    - `npm i -D @pmmmwh/react-refresh-webpack-plugin react-refresh-typescript`
 
 2. Detect environment in `webpack.config.js`: 
-   - convert the module.export to return 'anonymous function' instead of an 'object'.
-   - see line `const isDevelopment = argv.mode !== 'production';`
+   - add this line: `const isDevelopment = process.env.NODE_ENV !== 'production';`
 
-3. Add `ReactRefreshWebpackPlugin` to the configured webpack plugins:
-   - see line: `isDevelopment && new ReactRefreshWebpackPlugin()`
-   - filter plugins array: `.filter(Boolean)`
+3. Import the modules: 
+```javascript
+// webpack.config.js
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ReactRefreshTypeScript = require('react-refresh-typescript');
+```
+
+
+3. Add `ReactRefreshWebpackPlugin` to the configured webpack plugins array:
+
+```Javascript
+// webpack.config.js
+{
+  plugins: [
+    // ... opther plugins
+    isDevelopment && new ReactRefreshWebpackPlugin(),
+  ].filter(Boolean),
+}
+
+```
 
 4. Add custom transformer to `ts-loader`:
    
 ```javascript
+// webpack.config.js
 {
   // ...
   module: {
@@ -239,8 +259,7 @@ module.exports = {
         options: {
           getCustomTransformers: () => ({
             before: [isDevelopment && ReactRefreshTypeScript()].filter(Boolean),
-          }),
-          transpileOnly: isDevelopment,
+          })
         },
       }
     ]
@@ -264,16 +283,15 @@ Documentation at: https://prettier.io/docs/en/index.html
   "singleQuote": true
 }
 ```
-1. Add am "ignore" file to exclude some folders from formatting:
+3. Add an "ignore" file to exclude some folders from formatting:
    - create a file in the project's root folder called `.prettierignore` with the following content:
 
 ```
 dist
-build
 node_modules
 ```
 
-1. Update the `package.json` 'scripts' section with new commands:
+4. Update the `package.json` 'scripts' section with new commands:
 
 ```json
 {
@@ -366,7 +384,7 @@ module.exports = (_, argv) => {
 }
 ```
 
-1. Update `package.json` with handy new terminal commands:
+4. Update `package.json` with handy new terminal commands:
 
 ```json
 {
