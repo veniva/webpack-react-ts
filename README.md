@@ -624,3 +624,32 @@ module.exports = (_, argv) => {
     // ...
   }
 ```
+
+## Configure source-maps for debugging
+
+When we develop on the `localhost` using the dev server, we need to be able to live debug
+our code using the browsers `Developer Tools`. Because we're using TypeScript, we need to 
+configure `Webpack` so it creates source maps for our custom TypeScript code.
+
+1. Ensure that `tsconfig.json` contains this line: `"sourceMap": true,`.
+2. Configure Webpack `webpack.config.js`:
+
+```js
+module.exports = (_, argv) => {
+  //...
+  return {
+    // ...
+    devtool: isDevelopment ? "eval-source-map" : "source-map", // replace "source-map" with undefined if you don't want source maps for your production build
+    // ...
+  }
+}
+```
+
+We are using the [devtool](https://webpack.js.org/configuration/devtool/) configuration option for this
+behavior. Find detailed information on the configuration values in the documentation page.
+
+If we want to use tools like Sentry, it is good idea to use "source-map" as value for `devtool` option for the production build.
+The generated source maps should not be uploaded to the server to be publicly accessible.  
+They may be made available to Sentry by uploading them using their CLI tools (consult Sentry's docs).  
+If the project is internal private app, then those source maps can be served alongside the `js` files and Sentry will likely pick them up from there.
+(also consult to Sentry's docs on that if necessary)

@@ -26,6 +26,7 @@ module.exports = (_, argv) => {
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"] // enables the imports of those files without their extension being provided
     },
+    devtool: isDevelopment ? "eval-source-map" : "source-map", // replace "source-map" with undefined if you don't want source maps for your production build
     module: {
       rules:[
         {
