@@ -311,51 +311,52 @@ to be written, then we can run `prettier:check` which will only print the change
 
 ## Add ESLint
 
-Documentation: https://eslint.org/docs/latest/use/getting-started
-"ESLint is a configurable JavaScript linter. It helps you find and fix problems in your JavaScript code."
+*Documentation: https://eslint.org/docs/latest/use/getting-started*  
+
+*"ESLint is a configurable JavaScript linter. It helps you find and fix problems in your JavaScript code."*
 
 1. Add development dependencies via NPM:
-   - `npm i -D eslint eslint-plugin-react` to use it with ReactJS
-   - `npm i -D @typescript-eslint/parser @typescript-eslint/eslint-plugin` to use with TypeScript
-   - `npm i -D eslint-plugin-prettier eslint-config-prettier` to integrate prettier with eslint. `eslint-plugin-prettier` will enable the usage of prettier as eslint rule, 
-   `eslint-config-prettier` will disable eslint rules that will conflict with prettier.
-   - `npm i -D eslint-webpack-plugin` integrate with Webpack
+    - `npm i -D eslint eslint-plugin-react eslint-plugin-react-hooks` to use it with ReactJS
+    - `npm i -D @typescript-eslint/parser @typescript-eslint/eslint-plugin` to use with TypeScript
+    - `npm i -D eslint-plugin-prettier eslint-config-prettier` to integrate prettier with eslint. 
+    - `npm i -D eslint-webpack-plugin` integrate with Webpack
+  
+  - *Info on some of the modules we installed:*  
+      - `eslint-plugin-react-hooks` to apply rules related to React hooks in functional components.
+      - `eslint-plugin-prettier` will enable the usage of prettier as eslint rule, 
+      - `eslint-config-prettier` will disable eslint rules that will conflict with prettier.
 
-2. Create a file in the project's root directory called `.eslintrc` with the following content:
-```json
-{
-    "parser": "@typescript-eslint/parser",
-    "plugins": ["@typescript-eslint", "react", "prettier"],
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:react/recommended",
-      "plugin:prettier/recommended",
-      "prettier"
-    ],
-    "rules": {
-      "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-    "react/react-in-jsx-scope": "off",
-    "react/no-unescaped-entities": "off"
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "ecmaVersion": 12,
-      "sourceType": "module"
-    },
-    "env": {
-      "browser": true,
-      "node": true,
-      "es2021": true
-    }
-  }
+  - *Info on eslint's plugin configuration:*
+      - https://eslint.org/docs/latest/use/configure
+
+2. Create a file in the project's root directory called `.eslintrc.yaml` with the following content:
+```yaml
+parser: "@typescript-eslint/parser"
+plugins: ["@typescript-eslint", "react", "react-hooks", "prettier"]
+extends:
+  - "eslint:recommended"
+  - "plugin:@typescript-eslint/recommended"
+  - "plugin:react/recommended"
+  - "plugin:react-hooks/recommended"
+  - "plugin:prettier/recommended"
+  - "prettier" # It turns off any ESLint rules that conflict with Prettier's formatting.
+rules:
+  "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }] # report unused variables as `warnings`, exept when their name starts with `_`.
+  "react/react-in-jsx-scope": off     # checking whether React was imported in `.tsx` files.
+  "react/no-unescaped-entities": off  # requires you to replace some special chars in JSX strings.
+  "prettier/prettier": warn           # downgrade `prettier` problems to be reported as `warnings` not as `errors`.
+settings:
+  react:
+    version: detect
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 12
+  sourceType: module # we're using ES modules (like `import`, `export` statements).
+env:  # describe the environment so eslint doesn't report the available global vars as missing 
+  browser: true
+  node: true
+  es2021: true
 ```
 
 3. Add `eslint` plugin to `webpack.config.js`:
@@ -364,21 +365,20 @@ Documentation: https://eslint.org/docs/latest/use/getting-started
 //...
 const ESLintPlugin = require('eslint-webpack-plugin');
 //...
-module.exports = (_, argv) => {
+module.exports = {
   //...
   plugins: [
+    // ...
     new ESLintPlugin({
         extensions: ['js', 'jsx', 'ts', 'tsx'],
         context: 'src', // the folder where your source files are located
-        failOnError: false, // set to true if you want the build to fail on any ES##Lint error
-        emitWarning: true, // set to true if you want ESLint errors to be treated as warnings
       }),
   ],
+  // ...
   devServer: {
     // ...
     client: {
       overlay: {
-        errors: false, // Disable the overlay for errors
         warnings: false, // Disable the overlay for warnings
       },
     },

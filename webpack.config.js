@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const ReactRefreshTypeScript = require('react-refresh-typescript');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -33,7 +34,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "public", "index.html")
     }),
-    isDevelopment && new ReactRefreshWebpackPlugin()
+    isDevelopment && new ReactRefreshWebpackPlugin(),
+    new ESLintPlugin({
+      extensions: ['js', 'jsx', 'ts', 'tsx'],
+      context: 'src', // the folder where your source files are located
+    }),
   ].filter(Boolean),
   devServer: {
     port: 3000,
@@ -43,5 +48,10 @@ module.exports = {
      * https://webpack.js.org/configuration/dev-server/#devserverhistoryapifallback
      */
     historyApiFallback: true,
+    client: {
+      overlay: {
+        warnings: false, // Disable the overlay for warnings
+      },
+    },
   }
 };
