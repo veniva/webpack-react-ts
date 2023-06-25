@@ -173,7 +173,7 @@ module.exports = {
   module: {
     rules:[
       {
-        test: /\.tsx?$/, // matches .ts and .tsx files
+        test: /\.(ts|js)x?$/, // matches .ts and .tsx files
         use: 'ts-loader', // applies ts-loader to the matched files
         exclude: /node_modules/, // excludes files in the node_modules directory
       },
@@ -185,20 +185,16 @@ module.exports = {
     })
   ],
   devServer: {
-    compress: true,
     port: 3000,
     open: true,
-    historyApiFallback: true, // enables the fallback to index.html
-    client: {
-      // https://webpack.js.org/configuration/dev-server/#overlay
-      overlay: { // may be set to 'false' directly
-        errors: false, // Disable the overlay for errors
-        warnings: false, // Disable the overlay for warnings
-      },
-    },
+    /**
+     * Enables the fallback to index.html
+     * https://webpack.js.org/configuration/dev-server/#devserverhistoryapifallback
+     */
+    historyApiFallback: true,
   }
 };
-
+1
 ```
 
 2. Add `dist` to `.gitignore`
