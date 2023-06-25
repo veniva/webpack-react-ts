@@ -468,6 +468,73 @@ We can tweek this to achieve formatting we would like to have.
 Here is a link to the [css-loader](https://github.com/webpack-contrib/css-loader#modules) docs.  
 
 
+## Asset management
+
+Use asset files (images, fonts, etc...) in project
+https://webpack.js.org/guides/asset-modules/#resource-assets
+
+1. Configure webpack
+
+```javascript
+return {
+	// ...
+	output: {
+		// ...
+		assetModuleFilename: "assets/[name]__[hash][ext]",
+	},
+	// ...
+	module: {
+      rules: [
+		// ...
+		    {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'asset/resource'
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/i,
+          type: 'asset/resource',
+        },
+	  ]
+	}
+}
+```
+2. TypeScript type definitions
+
+1. Create a file `typings.d.ts` to hold any sort of global type definitions for the project:
+
+```typescript
+declare module "*.png" {
+  const value: any;
+  export default value;
+}
+
+declare module "*.jpg" {
+  const value: any;
+  export default value;
+}
+
+declare module "*.jpeg" {
+  const value: any;
+  export default value;
+}
+
+declare module "*.svg" {
+  const value: any;
+  export default value;
+}
+```
+
+2. Update `tsconfig.json` to `include` the new file:
+
+```json
+{
+	"compilerOptions": {
+		...
+	},
+	"include": ["src", "typings.d.ts"]
+}
+```
+
 ## Add Webpack plugin to copy static content from "/public" to "/dist"
   
 Documentation at: https://webpack.js.org/plugins/copy-webpack-plugin/  

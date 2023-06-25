@@ -12,7 +12,8 @@ module.exports = (_, argv) => {
     entry: path.join(__dirname, "src", "index.tsx"),
     output: {
       filename: "bundle.js",
-      path: path.resolve(__dirname, "dist")
+      path: path.resolve(__dirname, "dist"),
+      assetModuleFilename: "assets/[name]__[hash][ext]"
     },
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"] // enables the imports of those files without their extension being provided
@@ -54,6 +55,14 @@ module.exports = (_, argv) => {
             },
             'sass-loader', // transpile the SCSS into CSS
           ],
+        },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'asset/resource'
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/i,
+          type: 'asset/resource',
         }
       ],
     },
