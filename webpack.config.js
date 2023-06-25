@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const ReactRefreshTypeScript = require('react-refresh-typescript');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // https://webpack.js.org/configuration/
 module.exports = (_, argv) => {
@@ -13,7 +14,8 @@ module.exports = (_, argv) => {
     output: {
       filename: "bundle.js",
       path: path.resolve(__dirname, "dist"),
-      assetModuleFilename: "assets/[name]__[hash][ext]"
+      assetModuleFilename: "assets/[name]__[hash][ext]",
+      clean: true,
     },
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"] // enables the imports of those files without their extension being provided
@@ -74,6 +76,18 @@ module.exports = (_, argv) => {
       new ESLintPlugin({
         extensions: ['js', 'jsx', 'ts', 'tsx'],
         context: 'src', // the folder where your source files are located
+      }),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: path.join(__dirname, 'public'),
+            to: path.join(__dirname, 'dist'),
+            globOptions: {
+              ignore: ['**/index.html'], // Exclude index.html as it's already handled by HtmlWebpackPlugin
+            },
+            noErrorOnMissing: true,
+          },
+        ],
       }),
     ].filter(Boolean),
     devServer: {
